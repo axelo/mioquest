@@ -137,6 +137,8 @@
 
         var dt = new Date().getTime() - lastTime;
 
+	dt = Math.max(1, dt);
+
         updateMio();
 
         if (Mio.y > 188) Mio.y -= 32;
