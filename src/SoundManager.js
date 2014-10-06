@@ -4,8 +4,8 @@ function SoundManager() {
   var buffers = {};
   var playedEffects = {};
 
-  var musicGainNode = context.createGainNode();
-  var effectGainNode = context.createGainNode();
+  var musicGainNode = context.createGain();
+  var effectGainNode = context.createGain();
 
   var currentMusicBuffer;
   var lastEffectSource;
@@ -62,7 +62,7 @@ function SoundManager() {
       source.connect(musicGainNode);
       
       if (!start) start = 0;
-      source.noteOn(0);
+      source.start(0);
 
       currentMusicBuffer = source;
 
@@ -75,7 +75,7 @@ function SoundManager() {
 
   this.stopMusic = function() {
     if (currentMusicBuffer) {
-      currentMusicBuffer.noteOff(0);
+      currentMusicBuffer.stop(0);
       currentMusicBuffer = null;
     }
   }
@@ -83,7 +83,7 @@ function SoundManager() {
   this.stopAllEffects = function() {
     Object.keys(playedEffects).forEach(function(effect) {
       if (playedEffects[effect] && playedEffects[effect].source) {
-        playedEffects[effect].source.noteOff(0);
+        playedEffects[effect].source.stop(0);
       }
     });
   }
@@ -95,7 +95,7 @@ function SoundManager() {
 
     if (loop) source.loop = true;
 
-    source.noteOn(0);
+    source.start(0);
     console.log("Playing effect " + id);
 
     playedEffects[id] = {
@@ -107,7 +107,7 @@ function SoundManager() {
 
   this.stopEffect = function(id) {
     if (this.isOrGoingToPlayEffect(id)) {
-      playedEffects[id].source.noteOff(0);
+      playedEffects[id].source.stop(0);
       playedEffects[id] = null;
     }
   }
